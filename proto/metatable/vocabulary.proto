@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+import "proto/metatable/shared.proto";
+
+package metatable;
+
+// 词汇
+service Vocabulary
+{
+    // 导入YAML
+    rpc ImportYaml(ImportYamlRequest) returns (ImportResponse) {}
+}
+
+// 导入的回复
+message ImportResponse
+{
+    Status status = 1; // 状态
+    int64 total = 2;   // 内容的总条数
+    int64 success = 3; // 成功导入的条数
+}
+
+// 导入YAML的请求
+message ImportYamlRequest
+{
+    string content = 1; // 内容
+}
