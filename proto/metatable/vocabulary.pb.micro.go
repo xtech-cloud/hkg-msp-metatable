@@ -35,7 +35,11 @@ var _ server.Option
 
 type VocabularyService interface {
 	// 导入YAML
-	ImportYaml(ctx context.Context, in *ImportYamlRequest, opts ...client.CallOption) (*ImportResponse, error)
+	ImportYaml(ctx context.Context, in *ImportYamlRequest, opts ...client.CallOption) (*BlankResponse, error)
+	// 列举
+	List(ctx context.Context, in *ListRequest, opts ...client.CallOption) (*VocabularyListResponse, error)
+	// 查找
+	Find(ctx context.Context, in *FindRequest, opts ...client.CallOption) (*VocabularyFindResponse, error)
 }
 
 type vocabularyService struct {
@@ -50,9 +54,29 @@ func NewVocabularyService(name string, c client.Client) VocabularyService {
 	}
 }
 
-func (c *vocabularyService) ImportYaml(ctx context.Context, in *ImportYamlRequest, opts ...client.CallOption) (*ImportResponse, error) {
+func (c *vocabularyService) ImportYaml(ctx context.Context, in *ImportYamlRequest, opts ...client.CallOption) (*BlankResponse, error) {
 	req := c.c.NewRequest(c.name, "Vocabulary.ImportYaml", in)
-	out := new(ImportResponse)
+	out := new(BlankResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *vocabularyService) List(ctx context.Context, in *ListRequest, opts ...client.CallOption) (*VocabularyListResponse, error) {
+	req := c.c.NewRequest(c.name, "Vocabulary.List", in)
+	out := new(VocabularyListResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *vocabularyService) Find(ctx context.Context, in *FindRequest, opts ...client.CallOption) (*VocabularyFindResponse, error) {
+	req := c.c.NewRequest(c.name, "Vocabulary.Find", in)
+	out := new(VocabularyFindResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -64,12 +88,18 @@ func (c *vocabularyService) ImportYaml(ctx context.Context, in *ImportYamlReques
 
 type VocabularyHandler interface {
 	// 导入YAML
-	ImportYaml(context.Context, *ImportYamlRequest, *ImportResponse) error
+	ImportYaml(context.Context, *ImportYamlRequest, *BlankResponse) error
+	// 列举
+	List(context.Context, *ListRequest, *VocabularyListResponse) error
+	// 查找
+	Find(context.Context, *FindRequest, *VocabularyFindResponse) error
 }
 
 func RegisterVocabularyHandler(s server.Server, hdlr VocabularyHandler, opts ...server.HandlerOption) error {
 	type vocabulary interface {
-		ImportYaml(ctx context.Context, in *ImportYamlRequest, out *ImportResponse) error
+		ImportYaml(ctx context.Context, in *ImportYamlRequest, out *BlankResponse) error
+		List(ctx context.Context, in *ListRequest, out *VocabularyListResponse) error
+		Find(ctx context.Context, in *FindRequest, out *VocabularyFindResponse) error
 	}
 	type Vocabulary struct {
 		vocabulary
@@ -82,6 +112,14 @@ type vocabularyHandler struct {
 	VocabularyHandler
 }
 
-func (h *vocabularyHandler) ImportYaml(ctx context.Context, in *ImportYamlRequest, out *ImportResponse) error {
+func (h *vocabularyHandler) ImportYaml(ctx context.Context, in *ImportYamlRequest, out *BlankResponse) error {
 	return h.VocabularyHandler.ImportYaml(ctx, in, out)
+}
+
+func (h *vocabularyHandler) List(ctx context.Context, in *ListRequest, out *VocabularyListResponse) error {
+	return h.VocabularyHandler.List(ctx, in, out)
+}
+
+func (h *vocabularyHandler) Find(ctx context.Context, in *FindRequest, out *VocabularyFindResponse) error {
+	return h.VocabularyHandler.Find(ctx, in, out)
 }

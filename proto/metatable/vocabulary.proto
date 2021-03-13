@@ -4,23 +4,33 @@ import "proto/metatable/shared.proto";
 
 package metatable;
 
+// 实体
+message VocabularyEntity
+{
+    string name = 1;         // 名称
+    repeated string tag = 2; // 标签
+}
+
 // 词汇
 service Vocabulary
 {
     // 导入YAML
-    rpc ImportYaml(ImportYamlRequest) returns (ImportResponse) {}
+    rpc ImportYaml(ImportYamlRequest) returns (BlankResponse) {}
+    // 列举
+    rpc List(ListRequest) returns (VocabularyListResponse) {}
+    // 查找
+    rpc Find(FindRequest) returns (VocabularyFindResponse) {}
 }
 
-// 导入的回复
-message ImportResponse
+message VocabularyListResponse
 {
-    Status status = 1; // 状态
-    int64 total = 2;   // 内容的总条数
-    int64 success = 3; // 成功导入的条数
+    Status status = 1;                    // 状态
+    int64 total = 2;                      // 实体总数
+    repeated VocabularyEntity entity = 3; // 实体列表
 }
 
-// 导入YAML的请求
-message ImportYamlRequest
+message VocabularyFindResponse
 {
-    string content = 1; // 内容
+    Status status = 1;                    // 状态
+    repeated VocabularyEntity entity = 2; // 实体列表
 }

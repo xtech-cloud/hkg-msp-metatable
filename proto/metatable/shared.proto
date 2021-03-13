@@ -14,3 +14,22 @@ message BlankResponse
 {
     Status status = 1; // 状态
 }
+
+// 导入YAML的请求
+message ImportYamlRequest
+{
+    string content = 1; // 内容
+}
+
+// 列举的请求
+message ListRequest
+{
+    int64 offset = 1; // 偏移值
+    int64 count = 2;  // 数量
+}
+
+// 查找的请求
+message FindRequest
+{
+    string name = 1; // 名称
+}
