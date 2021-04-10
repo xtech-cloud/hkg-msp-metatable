@@ -8,7 +8,7 @@ package metatable;
 message VocabularyEntity
 {
     string name = 1;         // 名称
-    repeated string tag = 2; // 标签
+    repeated string label = 2; // 标签
 }
 
 // 词汇
