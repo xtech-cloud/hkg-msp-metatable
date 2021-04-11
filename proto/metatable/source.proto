@@ -7,8 +7,9 @@ package metatable;
 // 实体
 message SourceEntity
 {
-    string name = 1;    // 名称
-    string address = 2; // 地址
+    string name = 1;       // 名称
+    string address = 2;    // 地址
+    string expression = 3; // 表达式
 }
 
 // 来源
