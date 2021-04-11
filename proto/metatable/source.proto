@@ -10,6 +10,7 @@ message SourceEntity
     string name = 1;       // 名称
     string address = 2;    // 地址
     string expression = 3; // 表达式
+    string attribute = 4;  // 属性
 }
 
 // 来源
