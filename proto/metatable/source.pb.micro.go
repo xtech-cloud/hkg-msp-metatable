@@ -38,6 +38,8 @@ type SourceService interface {
 	ImportYaml(ctx context.Context, in *ImportYamlRequest, opts ...client.CallOption) (*BlankResponse, error)
 	// 列举
 	List(ctx context.Context, in *ListRequest, opts ...client.CallOption) (*SourceListResponse, error)
+	// 删除
+	Delete(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*BlankResponse, error)
 }
 
 type sourceService struct {
@@ -72,6 +74,16 @@ func (c *sourceService) List(ctx context.Context, in *ListRequest, opts ...clien
 	return out, nil
 }
 
+func (c *sourceService) Delete(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*BlankResponse, error) {
+	req := c.c.NewRequest(c.name, "Source.Delete", in)
+	out := new(BlankResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Source service
 
 type SourceHandler interface {
@@ -79,12 +91,15 @@ type SourceHandler interface {
 	ImportYaml(context.Context, *ImportYamlRequest, *BlankResponse) error
 	// 列举
 	List(context.Context, *ListRequest, *SourceListResponse) error
+	// 删除
+	Delete(context.Context, *DeleteRequest, *BlankResponse) error
 }
 
 func RegisterSourceHandler(s server.Server, hdlr SourceHandler, opts ...server.HandlerOption) error {
 	type source interface {
 		ImportYaml(ctx context.Context, in *ImportYamlRequest, out *BlankResponse) error
 		List(ctx context.Context, in *ListRequest, out *SourceListResponse) error
+		Delete(ctx context.Context, in *DeleteRequest, out *BlankResponse) error
 	}
 	type Source struct {
 		source
@@ -103,4 +118,8 @@ func (h *sourceHandler) ImportYaml(ctx context.Context, in *ImportYamlRequest, o
 
 func (h *sourceHandler) List(ctx context.Context, in *ListRequest, out *SourceListResponse) error {
 	return h.SourceHandler.List(ctx, in, out)
+}
+
+func (h *sourceHandler) Delete(ctx context.Context, in *DeleteRequest, out *BlankResponse) error {
+	return h.SourceHandler.Delete(ctx, in, out)
 }

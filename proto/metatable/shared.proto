@@ -33,3 +33,9 @@ message FindRequest
 {
     string name = 1; // 名称
 }
+
+// 删除的请求
+message DeleteRequest
+{
+    string uuid = 1; // 唯一识别码
+}

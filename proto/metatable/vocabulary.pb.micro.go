@@ -40,6 +40,8 @@ type VocabularyService interface {
 	List(ctx context.Context, in *ListRequest, opts ...client.CallOption) (*VocabularyListResponse, error)
 	// 查找
 	Find(ctx context.Context, in *FindRequest, opts ...client.CallOption) (*VocabularyFindResponse, error)
+	// 删除
+	Delete(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*BlankResponse, error)
 }
 
 type vocabularyService struct {
@@ -84,6 +86,16 @@ func (c *vocabularyService) Find(ctx context.Context, in *FindRequest, opts ...c
 	return out, nil
 }
 
+func (c *vocabularyService) Delete(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*BlankResponse, error) {
+	req := c.c.NewRequest(c.name, "Vocabulary.Delete", in)
+	out := new(BlankResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Vocabulary service
 
 type VocabularyHandler interface {
@@ -93,6 +105,8 @@ type VocabularyHandler interface {
 	List(context.Context, *ListRequest, *VocabularyListResponse) error
 	// 查找
 	Find(context.Context, *FindRequest, *VocabularyFindResponse) error
+	// 删除
+	Delete(context.Context, *DeleteRequest, *BlankResponse) error
 }
 
 func RegisterVocabularyHandler(s server.Server, hdlr VocabularyHandler, opts ...server.HandlerOption) error {
@@ -100,6 +114,7 @@ func RegisterVocabularyHandler(s server.Server, hdlr VocabularyHandler, opts ...
 		ImportYaml(ctx context.Context, in *ImportYamlRequest, out *BlankResponse) error
 		List(ctx context.Context, in *ListRequest, out *VocabularyListResponse) error
 		Find(ctx context.Context, in *FindRequest, out *VocabularyFindResponse) error
+		Delete(ctx context.Context, in *DeleteRequest, out *BlankResponse) error
 	}
 	type Vocabulary struct {
 		vocabulary
@@ -122,4 +137,8 @@ func (h *vocabularyHandler) List(ctx context.Context, in *ListRequest, out *Voca
 
 func (h *vocabularyHandler) Find(ctx context.Context, in *FindRequest, out *VocabularyFindResponse) error {
 	return h.VocabularyHandler.Find(ctx, in, out)
+}
+
+func (h *vocabularyHandler) Delete(ctx context.Context, in *DeleteRequest, out *BlankResponse) error {
+	return h.VocabularyHandler.Delete(ctx, in, out)
 }
