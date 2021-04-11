@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+import "proto/metatable/shared.proto";
+
+package metatable;
+
+// 实体
+message SourceEntity
+{
+    string name = 1;    // 名称
+    string address = 2; // 地址
+}
+
+// 来源
+service Source
+{
+    // 导入YAML
+    rpc ImportYaml(ImportYamlRequest) returns (BlankResponse) {}
+    // 列举
+    rpc List(ListRequest) returns (SourceListResponse) {}
+}
+
+message SourceListResponse
+{
+    Status status = 1;                // 状态
+    int64 total = 2;                  // 实体总数
+    repeated SourceEntity entity = 3; // 实体列表
+}
