@@ -10,6 +10,7 @@ message VocabularyEntity
     string uuid = 1;           // 唯一识别码
     string name = 2;           // 名称
     repeated string label = 3; // 标签
+    string schema = 4;         // 结构
 }
 
 // 词汇
