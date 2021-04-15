@@ -12,12 +12,19 @@ message RuleEntity
     string element = 3; // 原始文本中的标签
 }
 
+// 构建器实体
+message BuilderEntity
+{
+    string source = 1;            // 来源名
+    repeated RuleEntity rule = 2; // 规则列表
+}
+
 // 结构实体
 message SchemaEntity
 {
-    string uuid = 1;              // 唯一识别码
-    string source = 2;            // 来源名
-    repeated RuleEntity rule = 3; // 规则列表
+    string uuid = 1;                    // 唯一识别码
+    string name = 2;                    // 结构名称
+    repeated BuilderEntity builder = 3; // 构建器列表
 }
 
 // 来源
