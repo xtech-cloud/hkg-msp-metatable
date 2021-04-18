@@ -7,10 +7,11 @@ package metatable;
 // 规则实体
 message RuleEntity
 {
-    string field = 1;    // 字段
-    string type = 2;     // 类型，可选值为[text, ary, map]
-    string element = 3;  // 原始文本中的标签
-    PairEntity pair = 4; // type=map时的键和值
+    string name = 1;     // 名称
+    string field = 2;    // 字段
+    string type = 3;     // 类型，可选值为[text, ary, map]
+    string element = 4;  // 原始文本中的标签
+    PairEntity pair = 5; // type=map时的键和值
 }
 
 // 结构实体
