@@ -9,6 +9,13 @@ message Status
     string message = 2; // 状态信息
 }
 
+// 键值对实体
+message PairEntity
+{
+    string key = 1;   // 键
+    string value = 2; // 值
+}
+
 // 空白回复
 message BlankResponse
 {

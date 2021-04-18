@@ -7,24 +7,18 @@ package metatable;
 // 规则实体
 message RuleEntity
 {
-    string field = 1;   // 字段
-    string text = 2;    // 显示名
-    string element = 3; // 原始文本中的标签
-}
-
-// 构建器实体
-message BuilderEntity
-{
-    string source = 1;            // 来源名
-    repeated RuleEntity rule = 2; // 规则列表
+    string field = 1;    // 字段
+    string type = 2;     // 类型，可选值为[text, ary, map]
+    string element = 3;  // 原始文本中的标签
+    PairEntity pair = 4; // type=map时的键和值
 }
 
 // 结构实体
 message SchemaEntity
 {
-    string uuid = 1;                    // 唯一识别码
-    string name = 2;                    // 结构名称
-    repeated BuilderEntity builder = 3; // 构建器列表
+    string uuid = 1;              // 唯一识别码
+    string name = 2;              // 结构名称
+    repeated RuleEntity rule = 3; // 规则列表
 }
 
 // 来源
